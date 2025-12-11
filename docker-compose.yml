@@ -1,0 +1,149 @@
+# منصة الفولت في الفيزياء - Docker Compose
+# تطوير: Abdulrahman Ghonaim
+
+version: '3.8'
+
+services:
+  # تطبيق الويب الرئيسي
+  volt-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: volt-physics-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - volt-api
+      - volt-db
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - volt-network
+    restart: unless-stopped
+
+  # API الخلفي
+  volt-api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: volt-physics-api
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=volt-db
+      - DB_PORT=3306
+      - DB_NAME=volt_physics
+      - DB_USER=volt_user
+      - DB_PASSWORD=volt_secure_password
+    depends_on:
+      - volt-db
+      - volt-redis
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    networks:
+      - volt-network
+    restart: unless-stopped
+
+  # قاعدة البيانات MySQL
+  volt-db:
+    image: mysql:8.0
+    container_name: volt-physics-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_secure_password
+      - MYSQL_DATABASE=volt_physics
+      - MYSQL_USER=volt_user
+      - MYSQL_PASSWORD=volt_secure_password
+    volumes:
+      - volt_db_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - volt-network
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Redis للتخزين المؤقت
+  volt-redis:
+    image: redis:7-alpine
+    container_name: volt-physics-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - volt_redis_data:/data
+    networks:
+      - volt-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass redis_secure_password
+
+  # Nginx كخادم ويب
+  volt-nginx:
+    image: nginx:alpine
+    container_name: volt-physics-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./uploads:/var/www/uploads
+    depends_on:
+      - volt-web
+      - volt-api
+    networks:
+      - volt-network
+    restart: unless-stopped
+
+  # خدمة النسخ الاحتياطي
+  volt-backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile
+    container_name: volt-physics-backup
+    environment:
+      - DB_HOST=volt-db
+      - DB_NAME=volt_physics
+      - DB_USER=volt_user
+      - DB_PASSWORD=volt_secure_password
+      - BACKUP_SCHEDULE=0 2 * * *
+    volumes:
+      - ./backups:/app/backups
+      - ./uploads:/app/uploads
+    depends_on:
+      - volt-db
+    networks:
+      - volt-network
+    restart: unless-stopped
+
+  # مراقبة الأداء
+  volt-monitoring:
+    image: prom/prometheus
+    container_name: volt-physics-monitoring
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - volt_prometheus_data:/prometheus
+    networks:
+      - volt-network
+    restart: unless-stopped
+
+volumes:
+  volt_db_data:
+    driver: local
+  volt_redis_data:
+    driver: local
+  volt_prometheus_data:
+    driver: local
+
+networks:
+  volt-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

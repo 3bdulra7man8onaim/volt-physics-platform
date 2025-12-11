@@ -1,0 +1,127 @@
+# منصة الفولت في الفيزياء - Docker Compose للتطوير
+# تطوير: Abdulrahman Ghonaim
+
+version: '3.8'
+
+services:
+  # تطبيق الويب للتطوير
+  volt-web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: volt-physics-web-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:5000
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - volt-api-dev
+      - volt-db-dev
+    networks:
+      - volt-dev-network
+    restart: unless-stopped
+
+  # API للتطوير
+  volt-api-dev:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    container_name: volt-physics-api-dev
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=volt-db-dev
+      - DB_PORT=3306
+      - DB_NAME=volt_physics_dev
+      - DB_USER=volt_dev_user
+      - DB_PASSWORD=volt_dev_password
+      - JWT_SECRET=dev_jwt_secret_key
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+    depends_on:
+      - volt-db-dev
+      - volt-redis-dev
+    networks:
+      - volt-dev-network
+    restart: unless-stopped
+
+  # قاعدة البيانات للتطوير
+  volt-db-dev:
+    image: mysql:8.0
+    container_name: volt-physics-db-dev
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_dev_password
+      - MYSQL_DATABASE=volt_physics_dev
+      - MYSQL_USER=volt_dev_user
+      - MYSQL_PASSWORD=volt_dev_password
+    volumes:
+      - volt_dev_db_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/dev-data.sql:/docker-entrypoint-initdb.d/dev-data.sql
+    networks:
+      - volt-dev-network
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Redis للتطوير
+  volt-redis-dev:
+    image: redis:7-alpine
+    container_name: volt-physics-redis-dev
+    ports:
+      - "6380:6379"
+    volumes:
+      - volt_dev_redis_data:/data
+    networks:
+      - volt-dev-network
+    restart: unless-stopped
+
+  # phpMyAdmin للإدارة السهلة لقاعدة البيانات
+  volt-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: volt-physics-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=volt-db-dev
+      - PMA_PORT=3306
+      - PMA_USER=volt_dev_user
+      - PMA_PASSWORD=volt_dev_password
+    depends_on:
+      - volt-db-dev
+    networks:
+      - volt-dev-network
+    restart: unless-stopped
+
+  # MailHog لاختبار البريد الإلكتروني
+  volt-mailhog:
+    image: mailhog/mailhog
+    container_name: volt-physics-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - volt-dev-network
+    restart: unless-stopped
+
+volumes:
+  volt_dev_db_data:
+    driver: local
+  volt_dev_redis_data:
+    driver: local
+
+networks:
+  volt-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

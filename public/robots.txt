@@ -1,0 +1,34 @@
+# منصة الفولت في الفيزياء - Robots.txt
+# تطوير: Abdulrahman Ghonaim
+
+User-agent: *
+Allow: /
+
+# السماح للصفحات المهمة
+Allow: /courses
+Allow: /teachers
+Allow: /about
+Allow: /contact
+
+# منع الصفحات الحساسة
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /dashboard
+Disallow: /_netlify/
+
+# منع ملفات النظام
+Disallow: /static/
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# Sitemap
+Sitemap: https://volt-physics.netlify.app/sitemap.xml
+
+# معلومات إضافية
+# Website: https://volt-physics.netlify.app
+# Contact: abdulrahman.ghonaim@gmail.com
+# Teacher: مستر السيد محمد
+# Subject: الفيزياء للمرحلة الثانوية

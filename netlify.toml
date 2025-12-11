@@ -1,0 +1,94 @@
+# منصة الفولت في الفيزياء - إعدادات Netlify
+# تطوير: Abdulrahman Ghonaim
+
+[build]
+  # مجلد البناء
+  publish = "build"
+  
+  # أمر البناء
+  command = "npm run build"
+  
+  # متغيرات البيئة للبناء
+  environment = { NODE_VERSION = "18" }
+
+[build.processing]
+  # تحسين الصور تلقائياً
+  skip_processing = false
+
+[build.processing.css]
+  # ضغط ملفات CSS
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  # ضغط ملفات JavaScript
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  # ضغط ملفات HTML
+  pretty_urls = true
+
+[build.processing.images]
+  # تحسين الصور
+  compress = true
+
+# إعدادات الأمان والأداء
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/static/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# إعدادات التوجيه للـ SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"], Country = ["US"]}
+
+# إعدادات النماذج (إذا كنت تستخدم Netlify Forms)
+[build.environment]
+  REACT_APP_NETLIFY_FORMS = "true"
+  REACT_APP_SITE_URL = "https://volt-physics.netlify.app"
+
+# إعدادات الوظائف (Functions) إذا كنت تحتاجها
+[functions]
+  directory = "netlify/functions"
+
+# إعدادات المعاينة للفروع
+[context.branch-deploy]
+  command = "npm run build"
+
+[context.deploy-preview]
+  command = "npm run build"
+
+# إعدادات التطوير المحلي
+[dev]
+  command = "npm start"
+  port = 3000
+  publish = "build"
+  autoLaunch = true

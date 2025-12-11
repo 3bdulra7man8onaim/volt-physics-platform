@@ -1,0 +1,139 @@
+# منصة الفولت في الفيزياء - ملفات مستبعدة من Git
+# تطوير: Abdulrahman Ghonaim
+
+# التبعيات
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ملفات الإنتاج
+build/
+dist/
+*.tgz
+*.tar.gz
+
+# ملفات البيئة
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ملفات IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ملفات النظام
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ملفات السجلات
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ملفات التخزين المؤقت
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# ملفات الاختبار
+coverage/
+.nyc_output/
+.coverage/
+*.lcov
+
+# ملفات Docker
+.dockerignore
+
+# ملفات النسخ الاحتياطي
+backups/
+*.backup
+*.bak
+*.sql
+
+# ملفات الرفع
+uploads/
+temp/
+tmp/
+
+# ملفات SSL
+*.key
+*.crt
+*.pem
+ssl/
+
+# ملفات قاعدة البيانات
+*.sqlite
+*.sqlite3
+*.db
+
+# ملفات التكوين المحلية
+config/local.js
+config/local.json
+
+# ملفات الأمان
+secrets/
+.secrets/
+*.secret
+
+# ملفات المراقبة
+monitoring/data/
+prometheus/data/
+
+# ملفات التطوير
+.vite/
+.next/
+.nuxt/
+.output/
+
+# ملفات الاختبار E2E
+test-results/
+playwright-report/
+playwright/.cache/
+
+# ملفات Storybook
+storybook-static/
+
+# ملفات التوثيق المؤقتة
+docs/.vuepress/dist/
+docs/.vitepress/dist/
+
+# ملفات المحرر
+*.sublime-project
+*.sublime-workspace
+
+# ملفات macOS
+.AppleDouble
+.LSOverride
+Icon
+
+# ملفات Windows
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# ملفات Linux
+*~
+
+# ملفات خاصة بالمشروع
+.volt/
+volt-temp/
+physics-assets/temp/

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1e40af" />
+    <meta name="description" content="منصة الفولت في الفيزياء - مستر السيد محمد - أفضل منصة تعليمية للفيزياء في مصر" />
+    <meta name="keywords" content="فيزياء, تعليم, مستر السيد محمد, الفولت, منصة تعليمية, دروس فيزياء, شرح فيزياء" />
+    <meta name="author" content="Abdulrahman Ghonaim" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="منصة الفولت في الفيزياء - مستر السيد محمد" />
+    <meta property="og:description" content="أفضل منصة تعليمية للفيزياء في مصر مع مستر السيد محمد" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://volt-physics.netlify.app" />
+    <meta property="og:image" content="%PUBLIC_URL%/logo512.png" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="منصة الفولت في الفيزياء - مستر السيد محمد" />
+    <meta name="twitter:description" content="أفضل منصة تعليمية للفيزياء في مصر" />
+    <meta name="twitter:image" content="%PUBLIC_URL%/logo512.png" />
+    
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Netlify Identity Widget -->
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
+    <title>منصة الفولت في الفيزياء - مستر السيد محمد</title>
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: #333;
+        }
+        
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+        }
+        
+        .loading-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .developer-credit {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* تحسينات للأداء */
+        .loading-screen * {
+            will-change: transform, opacity;
+        }
+    </style>
+</head>
+<body>
+    <noscript>يجب تفعيل JavaScript لتشغيل هذا التطبيق.</noscript>
+    
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-logo">⚡ الفولت</div>
+        <div class="loading-text">
+            منصة الفيزياء الأولى في مصر<br>
+            مع مستر السيد محمد
+        </div>
+        <div class="spinner"></div>
+        <div class="developer-credit">
+            تطوير: Abdulrahman Ghonaim
+        </div>
+    </div>
+    
+    <div id="root"></div>
+    
+    <script>
+        // Netlify Identity Widget
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+        
+        // Hide loading screen when page loads
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.style.opacity = '0';
+                    loadingScreen.style.transition = 'opacity 0.5s ease-out';
+                    setTimeout(function() {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }
+            }, 1000);
+        });
+        
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+        
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            if ('performance' in window) {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                console.log('Page load time:', loadTime + 'ms');
+            }
+        });
+    </script>
+</body>
+</html>

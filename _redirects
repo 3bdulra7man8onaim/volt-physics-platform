@@ -1,0 +1,46 @@
+# منصة الفولت في الفيزياء - إعدادات Netlify Redirects
+# تطوير: Abdulrahman Ghonaim
+
+# SPA Routing - توجيه جميع الطلبات إلى index.html للتعامل مع React Router
+/*    /index.html   200
+
+# API Redirects - توجيه طلبات API (إذا كان لديك backend منفصل)
+/api/*  https://api.volt-physics.com/api/:splat  200
+
+# Static Assets - تحسين تحميل الملفات الثابتة
+/static/*  /static/:splat  200
+
+# Fonts - تحسين تحميل الخطوط
+/fonts/*  /fonts/:splat  200
+
+# Images - تحسين تحميل الصور
+/images/*  /images/:splat  200
+/uploads/*  /uploads/:splat  200
+
+# Security Headers
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.volt-physics.com;
+
+# Cache Control
+/static/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/static/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/static/media/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Specific route redirects for better SEO
+/home  /  301
+/courses  /  200
+/login  /  200
+/register  /  200
+/profile  /  200
+/course/*  /  200
+/admin/*  /  200
+/teacher/*  /  200

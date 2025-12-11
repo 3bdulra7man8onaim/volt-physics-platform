@@ -1,0 +1,35 @@
+# منصة الفولت في الفيزياء - Dockerfile للتطوير
+# تطوير: Abdulrahman Ghonaim
+
+FROM node:18-alpine
+
+# تعيين مجلد العمل
+WORKDIR /app
+
+# تثبيت الأدوات المطلوبة
+RUN apk add --no-cache git curl
+
+# نسخ ملفات package
+COPY package*.json ./
+
+# تثبيت التبعيات
+RUN npm install
+
+# نسخ كود المصدر
+COPY . .
+
+# إنشاء مستخدم غير جذر
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S volt -u 1001 -G nodejs
+
+# تعيين الصلاحيات
+RUN chown -R volt:nodejs /app
+
+# التبديل للمستخدم غير الجذر
+USER volt
+
+# كشف المنفذ
+EXPOSE 3000
+
+# تشغيل التطبيق في وضع التطوير
+CMD ["npm", "start"]
