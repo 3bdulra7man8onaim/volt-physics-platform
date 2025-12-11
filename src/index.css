@@ -1,0 +1,30 @@
+/* منصة الفولت في الفيزياء - الأنماط العامة */
+/* تطوير: Abdulrahman Ghonaim */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --volt-primary: #1e40af;
+  --volt-secondary: #3b82f6;
+  --volt-accent: #60a5fa;
+  --volt-dark: #1e3a8a;
+  --volt-light: #dbeafe;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
