@@ -39,7 +39,7 @@ MySQL >= 8.0
 ### خطوات التثبيت
 ```bash
 # استنساخ المشروع
-git clone https://github.com/your-username/volt-physics-platform.git
+git clone https://github.com/3bdulra7man8onaim/volt-physics-platform.git
 
 # الانتقال إلى مجلد المشروع
 cd volt-physics-platform
