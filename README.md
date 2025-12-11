@@ -155,4 +155,4 @@ export const apiConfig = {
 
 **⚡ منصة الفولت في الفيزياء - حيث تلتقي الفيزياء بالتكنولوجيا**
 
-*تطوير: Abdulrahman Ghonaim | 2024*
+*تطوير: Abdulrahman Ghonaim | 2024*# volt-physics-platform
